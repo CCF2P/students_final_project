@@ -1,105 +1,106 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BookHive - Виртуальная библиотека</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BookHive - Виртуальная библиотека</title>
+  <link rel="stylesheet" type="text/css" href="style.css"/>
 </head>
+
 <body>
-    <div class="container">
-        <!-- Шапка -->
-        <header class="header">
-            <h1>📚 BookHive</h1>
-            <p>Ваша виртуальная библиотека</p>
-        </header>
+  <div class="container">
+    <!-- Шапка -->
+    <header class="header">
+      <h1>📚 BookHive</h1>
+      <p>Ваша виртуальная библиотека</p>
+    </header>
 
-        <!-- Поиск -->
-        <section class="search-section">
-            <form id="searchForm" class="search-form">
-                <input type="text" 
-                       id="searchInput" 
-                       class="search-input" 
-                       placeholder="Введите название книги, автора или ключевые слова..."
-                       autocomplete="off">
-                <button type="submit" id="searchButton" class="search-button">
-                    Найти книги
-                </button>
-            </form>
-            
-            <!-- История поиска -->
-            <div id="searchHistory" class="search-history">
-                <!-- Динамически заполняется -->
-            </div>
-        </section>
+    <!-- Поиск -->
+    <section class="search-section">
+      <form id="searchForm" class="search-form">
+        <input type="text" id="searchInput" class="search-input"
+          placeholder="Введите название книги, автора или ключевые слова..." autocomplete="off">
+        <button type="submit" id="searchButton" class="search-button">
+          Найти книги
+        </button>
+      </form>
 
-        <!-- Результаты поиска -->
-        <section class="results-section">
-            <div class="results-header">
-                <div id="resultsCount" class="results-count">
-                    Введите запрос для поиска книг
-                </div>
-            </div>
+      <!-- История поиска -->
+      <div id="searchHistory" class="search-history">
+        <!-- Динамически заполняется -->
+      </div>
+    </section>
 
-            <!-- Индикатор загрузки -->
-            <div id="loadingSpinner" class="loading-spinner hidden">
-                <p>⌛ Ищем книги...</p>
-            </div>
+    <!-- Результаты поиска -->
+    <section class="results-section">
+      <div class="results-header">
+        <div id="resultsCount" class="results-count">
+          Введите запрос для поиска книг
+        </div>
+      </div>
 
-            <!-- Сообщение об ошибке -->
-            <div id="errorContainer" class="error-container hidden"></div>
+      <!-- Индикатор загрузки -->
+      <div id="loadingSpinner" class="loading-spinner hidden">
+        <p>⌛ Ищем книги...</p>
+      </div>
 
-            <!-- Сетка с книгами -->
-            <div id="searchResults" class="books-grid">
-                <!-- Результаты поиска будут здесь -->
-            </div>
+      <!-- Сообщение об ошибке -->
+      <div id="errorContainer" class="error-container hidden"></div>
 
-            <!-- Кнопка "Загрузить еще" -->
-            <div class="load-more-container" style="text-align: center; margin: 30px 0;">
-                <button id="loadMoreButton" class="search-button hidden">
-                    Загрузить еще книги
-                </button>
-            </div>
-        </section>
+      <!-- Сетка с книгами -->
+      <div id="searchResults" class="books-grid">
+        <!-- Результаты поиска будут здесь -->
+      </div>
 
-        <!-- Избранное -->
-        <section class="favorites-section">
-            <div class="favorites-header">
-                <div id="favoritesCount" class="favorites-count">
-                    Избранное: 0
-                </div>
-            </div>
+      <!-- Кнопка "Загрузить еще" -->
+      <div class="load-more-container" style="text-align: center; margin: 30px 0;">
+        <button id="loadMoreButton" class="search-button hidden">
+          Загрузить еще книги
+        </button>
+      </div>
+    </section>
 
-            <div id="favoritesList" class="favorites-grid">
-                <!-- Избранные книги будут здесь -->
-                <div class="no-favorites">
-                    <p>Здесь пока пусто</p>
-                    <p>Добавьте книги, нажимая на звездочку ☆</p>
-                </div>
-            </div>
-        </section>
-    </div>
+    <!-- Избранное -->
+    <section class="favorites-section">
+      <div class="favorites-header">
+        <div id="favoritesCount" class="favorites-count">
+          Избранное: 0
+        </div>
+      </div>
 
-    <!-- Подключаем скрипты -->
-    <script src="Book.js"></script>
-    <script src="Library.js"></script>
-    <script src="UI.js"></script>
-    <script src="App.js"></script>
-    
-    <!-- Инициализация приложения -->
-    <script>
-        // Проверяем, что DOM полностью загружен
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => {
-                const app = new App();
-                app.init();
-                window.app = app; // Для отладки в консоли
-            });
-        } else {
-            // DOM уже загружен
-            const app = new App();
-            app.init();
-            window.app = app;
-        }
-    </script>
+      <div id="favoritesList" class="favorites-grid">
+        <!-- Избранные книги будут здесь -->
+        <div class="no-favorites">
+          <p>Здесь пока пусто</p>
+          <p>Добавьте книги, нажимая на звездочку ☆</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Подключаем скрипты -->
+  <script src="Book.js"></script>
+  <script src="Library.js"></script>
+  <script src="UI.js"></script>
+  <script src="App.js"></script>
+
+  <!-- Инициализация приложения -->
+  <script>
+    // Проверяем, что DOM полностью загружен
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        const app = new App();
+        app.init();
+        window.app = app; // Для отладки в консоли
+      });
+    } else {
+      // DOM уже загружен
+      const app = new App();
+      app.init();
+      window.app = app;
+    }
+  </script>
 </body>
+
 </html>
