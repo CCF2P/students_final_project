@@ -60,47 +60,13 @@
         </button>
       </div>
     </section>
-
-    <!-- Избранное -->
-    <section class="favorites-section">
-      <div class="favorites-header">
-        <div id="favoritesCount" class="favorites-count">
-          Избранное: 0
-        </div>
-      </div>
-
-      <div id="favoritesList" class="favorites-grid">
-        <!-- Избранные книги будут здесь -->
-        <div class="no-favorites">
-          <p>Здесь пока пусто</p>
-          <p>Добавьте книги, нажимая на звездочку ☆</p>
-        </div>
-      </div>
-    </section>
   </div>
 
   <!-- Подключаем скрипты -->
-  <script src="Book.js"></script>
-  <script src="Library.js"></script>
-  <script src="UI.js"></script>
-  <script src="App.js"></script>
-
-  <!-- Инициализация приложения -->
-  <script>
-    // Проверяем, что DOM полностью загружен
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', () => {
-        const app = new App();
-        app.init();
-        window.app = app; // Для отладки в консоли
-      });
-    } else {
-      // DOM уже загружен
-      const app = new App();
-      app.init();
-      window.app = app;
-    }
-  </script>
+  <script src="scripts/Book.js"></script>
+  <script src="scripts/Library.js"></script>
+  <script src="scripts/UI.js"></script>
+  <script src="scripts/App.js"></script>
 </body>
 
 </html>

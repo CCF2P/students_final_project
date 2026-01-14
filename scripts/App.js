@@ -5,7 +5,6 @@ class App {
 
         this.handleSearch = this.handleSearch.bind(this);
         this.handleLoadMore = this.handleLoadMore.bind(this);
-        this.handleFavoriteToggle = this.handleFavoriteToggle.bind(this);
         this.handleBookDetails = this.handleBookDetails.bind(this);
         this.handleClearHistory = this.handleClearHistory.bind(this);
         this.handleKeyPress = this.handleKeyPress.bind(this);
@@ -16,13 +15,8 @@ class App {
 
     async init() {
         try {
-            // Загружаем избранное из localStorage
-            this.library.loadFromLocalStorage();
-
             // Инициализация UI
             this.ui.init();
-            // Отрисовываем выбранное
-            this.ui.renderFavorites();
 
             // Навешиваем обработчики событий
             this.bindEvents();
@@ -39,9 +33,9 @@ class App {
         if (elements.searchForm) {
             elements.searchForm.addEventListener("submit", this.handleSearch);
         }
-        //  Обработчик кнопки поиска
+        // Обработчик кнопки поиска
         if (elements.searchButton) {
-            elements.searchButton.addEventListener("submit", this.handleSearch);
+            elements.searchButton.addEventListener("click", this.handleSearch);
         }
         // Обработчик поля ввода (поиск при нажатии Enter)
         if (elements.searchInput) {
@@ -58,20 +52,6 @@ class App {
 
         // Делегирование событий для динамических элементов
         document.addEventListener('click', (event) => {
-            // Обработка кликов по кнопкам избранного
-            if (event.target.closest('.favorite-button')) {
-                const button = event.target.closest('.favorite-button');
-                const bookId = button.dataset.bookId;
-                this.handleFavoriteToggle(bookId);
-            }
-
-            // Обработка кликов по кнопкам удаления из избранного
-            if (event.target.closest('.remove-favorite-button')) {
-                const button = event.target.closest('.remove-favorite-button');
-                const bookId = button.dataset.bookId;
-                this.handleFavoriteToggle(bookId);
-            }
-
             // Обработка кликов по кнопкам "Подробнее"
             if (event.target.closest('.details-button')) {
                 const button = event.target.closest('.details-button');
@@ -164,19 +144,6 @@ class App {
     }
 
     /**
-     * Обрабатывает переключение состояния "избранное" для книги
-     * @param {string} bookId - ID книги
-     */
-    handleFavoriteToggle(bookId) {
-        try {
-            this.ui.toggleFavorite(bookId);
-        } catch (error) {
-            console.error('Ошибка при изменении избранного:', error);
-            this.ui.showError('Не удалось обновить избранное');
-        }
-    }
-
-    /**
      * Обрабатывает показ деталей книги
      * @param {string} bookId - ID книги
      */
@@ -225,8 +192,6 @@ class App {
             if (history.length > 0) {
                 // Устанавливаем последний запрос в поле ввода
                 this.ui.elements.searchInput.value = history[0];
-                // Опционально: автоматически выполнять поиск
-                // this.handleSearch(new Event('submit'));
             }
         } catch (error) {
             console.error('Ошибка при восстановлении истории:', error);
