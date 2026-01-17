@@ -17,9 +17,10 @@ class App {
         try {
             // Инициализация UI
             this.ui.init();
-
             // Навешиваем обработчики событий
             this.bindEvents();
+            // Сразу восстанавливаем историю поиска
+            this.restoreLastSearch();
         } catch (error) {
             console.log("[ERROR] ", error);
             this.ui.showError("Не удалось создать приложение");
@@ -74,12 +75,10 @@ class App {
     */
     async handleSearch(event) {
         event.preventDefault();
-
         // Если уже выполняется поиск, выходим
         if (this.isSearching) return;
 
         const query = this.ui.elements.searchInput.value.trim();
-
         // Если запрос пустой, показываем ошибку
         if (!query) {
             this.ui.showError('Введите поисковый запрос');
@@ -93,13 +92,10 @@ class App {
         try {
             // Выполняем поиск
             await this.library.searchBooks(query, 1);
-
             // Отрисовываем результаты
             this.ui.renderSearchResults(this.library.searchResults);
-
             // Отрисовываем обновленную историю поиска
             this.ui.renderSearchHistory();
-
         } catch (error) {
             console.error('Ошибка при выполнении поиска:', error);
             this.ui.showError(error.message || 'Произошла ошибка при поиске книг');
@@ -107,7 +103,6 @@ class App {
             // Очищаем результаты при ошибке
             this.library.clearSearchResults();
             this.ui.renderSearchResults([]);
-
         } finally {
             this.isSearching = false;
             this.ui.hideLoading();
@@ -121,6 +116,11 @@ class App {
         this.ui.showLoading();
 
         try {
+            /*
+            await this.library.loadNextPage();
+            this.ui.renderSearchResults(this.library.searchResults);
+            */
+
             const nextPage = this.library.currentPage + 1;
             const newBooks = await this.library.searchBooks(
                 this.library.currentQuery,
@@ -129,14 +129,11 @@ class App {
 
             // Добавляем новые книги к существующим результатам
             this.library.searchResults = [...this.library.searchResults, ...newBooks];
-
             // Отрисовываем обновленные результаты
             this.ui.renderSearchResults(this.library.searchResults);
-
         } catch (error) {
             console.error('Ошибка при загрузке следующей страницы:', error);
             this.ui.showError('Не удалось загрузить дополнительные результаты');
-
         } finally {
             this.isSearching = false;
             this.ui.hideLoading();
@@ -150,9 +147,10 @@ class App {
     handleBookDetails(bookId) {
         try {
             const book = this.library.findBookById(bookId);
-            if (book) {
-                this.ui.showBookDetails(book);
+            if (!book) {
+                throw new Error("Книга не найдена");
             }
+            this.ui.showBookDetails(book);
         } catch (error) {
             console.error('Ошибка при показе деталей книги:', error);
             this.ui.showError('Не удалось загрузить информацию о книге');
@@ -197,57 +195,10 @@ class App {
             console.error('Ошибка при восстановлении истории:', error);
         }
     }
-
-    /**
-     * Сохраняет состояние приложения перед закрытием
-     */
-    saveAppState() {
-        try {
-            const state = {
-                searchQuery: this.library.currentQuery,
-                currentPage: this.library.currentPage
-            };
-            localStorage.setItem('bookHive_appState', JSON.stringify(state));
-        } catch (error) {
-            console.error('Ошибка при сохранении состояния:', error);
-        }
-    }
-
-    /**
-     * Загружает сохраненное состояние приложения
-     */
-    loadAppState() {
-        try {
-            const state = JSON.parse(localStorage.getItem('bookHive_appState') || '{}');
-            if (state.searchQuery) {
-                this.ui.elements.searchInput.value = state.searchQuery;
-            }
-        } catch (error) {
-            console.error('Ошибка при загрузке состояния:', error);
-        }
-    }
-
-    /**
-     * Сбрасывает состояние приложения
-     */
-    resetApp() {
-        this.library.clearSearchResults();
-        this.ui.renderSearchResults([]);
-        this.ui.elements.searchInput.value = '';
-        this.ui.hideError();
-    }
 }
 
 // Инициализация приложения при загрузке страницы
 document.addEventListener('DOMContentLoaded', () => {
     const app = new App();
     app.init();
-    
-    // Экспортируем app в глобальную область видимости для отладки
-    window.app = app;
-    
-    // Сохраняем состояние при закрытии страницы
-    window.addEventListener('beforeunload', () => {
-        app.saveAppState();
-    });
 });
