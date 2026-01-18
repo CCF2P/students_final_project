@@ -24,7 +24,7 @@ class Book {
     }
 
     normalizeTitle(data) {
-        const title = date.title || data.Title || "";
+        const title = data.title || data.Title || "";
         return typeof(title) === "string" ? title.trim() || "Без названия" : "Без названния";
     }
 
@@ -86,7 +86,7 @@ class Book {
         // Прямой URL
         if (data.coverUrl && typeof(data.coverUrl) === "string")
             return data.coverUrl;
-        if (data.coverURL && typeof data.coverURL === 'string')
+        if (data.coverURL && typeof(data.coverURL) === 'string')
             return data.coverURL;
 
         // Для Open Library API
